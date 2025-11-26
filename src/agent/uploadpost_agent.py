@@ -36,7 +36,8 @@ def upload_video_multiplatform(video_path: str, title: str, description: str, pl
         
         response = client.upload_video(
             video_path=video_path,
-            title=description,
+            title=title,
+            description=description,
             user=os.getenv("UPLOADPOST_USER"),
             platforms=platforms
         )
