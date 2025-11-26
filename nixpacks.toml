@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python310"]
+
+[phases.install]
+cmds = ["pip install -e ."]
+
+[start]
+cmd = "python scheduler.py"
