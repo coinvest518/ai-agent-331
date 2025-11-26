@@ -37,12 +37,27 @@ def send_video_to_webhook(video_path: str, title: str, description: str) -> dict
     logger.info(f"Video file: {video_path} ({file_size} bytes)")
     
     try:
-        # Send video path and metadata (Make.com will need to access the file separately)
+        # Upload video to file.io for temporary public URL
+        logger.info("Uploading video to file.io for public URL...")
+        with open(video_path, 'rb') as video_file:
+            upload_response = requests.post(
+                'https://file.io',
+                files={'file': video_file},
+                timeout=120
+            )
+        
+        video_url = None
+        if upload_response.status_code == 200:
+            upload_data = upload_response.json()
+            video_url = upload_data.get('link')
+            logger.info(f"Video uploaded to: {video_url}")
+        
+        # Send video URL and metadata
         payload = {
             'title': title,
             'description': description,
             'filename': os.path.basename(video_path),
-            'video_path': os.path.abspath(video_path),
+            'video_url': video_url or 'upload_failed',
             'file_size_bytes': file_size,
             'status': 'video_ready'
         }
