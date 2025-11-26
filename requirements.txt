@@ -1,0 +1,10 @@
+langgraph>=1.0.0
+python-dotenv>=1.0.1
+langsmith>=0.4.26
+composio-langchain
+langchain
+langchain-google-genai
+langchain-community
+langchainhub
+langchain-tavily
+tavily-python
