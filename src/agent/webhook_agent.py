@@ -52,12 +52,16 @@ def send_video_to_webhook(video_path: str, title: str, description: str) -> dict
             logger.info(f"File.io response status: {upload_response.status_code}")
             logger.info(f"File.io response text: {upload_response.text[:200]}")
             
-            if upload_response.status_code == 200 and upload_response.text:
-                upload_data = upload_response.json()
-                video_url = upload_data.get('link')
-                logger.info(f"Video uploaded to: {video_url}")
+            if upload_response.status_code == 200 and upload_response.text.strip():
+                try:
+                    upload_data = upload_response.json()
+                    video_url = upload_data.get('link')
+                    logger.info(f"Video uploaded to: {video_url}")
+                except ValueError as json_error:
+                    logger.error(f"File.io returned invalid JSON: {json_error}")
+                    logger.error(f"Response content: {upload_response.text}")
             else:
-                logger.warning(f"File.io upload failed: {upload_response.status_code}")
+                logger.warning(f"File.io upload failed: status={upload_response.status_code}, empty_response={not upload_response.text.strip()}")
         except Exception as upload_error:
             logger.error(f"File upload error: {upload_error}")
         
