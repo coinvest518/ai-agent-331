@@ -39,18 +39,27 @@ def send_video_to_webhook(video_path: str, title: str, description: str) -> dict
     try:
         # Upload video to file.io for temporary public URL
         logger.info("Uploading video to file.io for public URL...")
-        with open(video_path, 'rb') as video_file:
-            upload_response = requests.post(
-                'https://file.io',
-                files={'file': video_file},
-                timeout=120
-            )
-        
         video_url = None
-        if upload_response.status_code == 200:
-            upload_data = upload_response.json()
-            video_url = upload_data.get('link')
-            logger.info(f"Video uploaded to: {video_url}")
+        
+        try:
+            with open(video_path, 'rb') as video_file:
+                upload_response = requests.post(
+                    'https://file.io',
+                    files={'file': video_file},
+                    timeout=120
+                )
+            
+            logger.info(f"File.io response status: {upload_response.status_code}")
+            logger.info(f"File.io response text: {upload_response.text[:200]}")
+            
+            if upload_response.status_code == 200 and upload_response.text:
+                upload_data = upload_response.json()
+                video_url = upload_data.get('link')
+                logger.info(f"Video uploaded to: {video_url}")
+            else:
+                logger.warning(f"File.io upload failed: {upload_response.status_code}")
+        except Exception as upload_error:
+            logger.error(f"File upload error: {upload_error}")
         
         # Send video URL and metadata
         payload = {
@@ -68,18 +77,20 @@ def send_video_to_webhook(video_path: str, title: str, description: str) -> dict
             headers={'Content-Type': 'application/json'},
             timeout=60
         )
-        response.raise_for_status()
         
-        logger.info(f"Webhook response: {response.status_code} - {response.text[:200]}")
+        logger.info(f"Webhook response: {response.status_code}")
         
-        # Try to parse JSON, fallback to text
-        try:
-            response_data = response.json() if response.text else {}
-        except:
-            response_data = {"text": response.text}
-        
-        return {"success": True, "status_code": response.status_code, "response": response_data}
+        # Make.com webhooks often return empty responses - this is OK
+        if response.status_code in [200, 201, 202]:
+            logger.info("Webhook sent successfully")
+            return {"success": True, "status_code": response.status_code}
+        else:
+            logger.warning(f"Webhook returned status {response.status_code}: {response.text[:200]}")
+            return {"success": False, "status_code": response.status_code, "error": response.text[:200]}
             
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Webhook request failed: {e}")
+        return {"success": False, "error": str(e)}
     except Exception as e:
         logger.error(f"Webhook failed: {e}")
         return {"success": False, "error": str(e)}
