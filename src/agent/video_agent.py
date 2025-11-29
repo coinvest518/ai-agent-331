@@ -38,14 +38,14 @@ REQUIREMENTS:
 - 9:16 vertical format (portrait)
 - 8 seconds duration
 - Dynamic camera movement (dolly, pan, or tracking shot)
-- Cinematic style with vibrant colors
+- Modern, professional style with clean visuals
 - Include specific actions and motion
-- Festive holiday theme with Santa's Spot branding
-- Futuristic/modern aesthetic
-- Add audio cues: upbeat holiday music, jingle bells, festive ambient sounds
+- Theme: AI tools, credit repair, automation, business success
+- Tech-forward aesthetic with UI elements
+- Add audio cues: upbeat tech music, success sounds, modern ambient
 
 FORMAT:
-[Camera movement] of [subject] [action] in [setting]. [Visual details]. [Lighting/ambiance]. Audio: [sound effects, music, ambient noise]. Cinematic, vibrant, festive.
+[Camera movement] of [subject] [action] in [setting]. [Visual details]. [Lighting/ambiance]. Audio: [sound effects, music, ambient noise]. Modern, professional, inspiring.
 
 OUTPUT:
 Return ONLY the video prompt with audio cues. No explanations."""
@@ -57,7 +57,7 @@ Return ONLY the video prompt with audio cues. No explanations."""
         return video_prompt
     except Exception as e:
         logger.error(f"Failed to enhance prompt: {e}")
-        return f"Cinematic vertical video of holiday magic with Santa's Spot. Festive, vibrant, dynamic camera movement."
+        return f"Modern vertical video showcasing AI credit repair tools and automation. Professional, clean, dynamic camera movement."
 
 
 def generate_video_from_tweet(tweet_text: str, image_path: str = None) -> str:

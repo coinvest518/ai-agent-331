@@ -1,39 +1,49 @@
-"""Scheduler to run Twitter agent every 1 hour 17 minutes."""
+"""Autonomous AI marketing agent scheduler."""
 
 import asyncio
 import time
+import random
 from datetime import datetime
 from src.agent.graph import graph, State
 
 async def run_agent():
-    """Run the Twitter agent."""
-    print(f"\n[{datetime.now()}] Running Twitter agent...")
+    """Run the AI marketing agent autonomously."""
+    print(f"\n[{datetime.now()}] AI Agent running autonomously...")
     
-    queries = [
-        "post a new tweet: Discover the joy of family holidays with Santa's Spot! Plan magical moments together.",
-        "post a new tweet: What's your favorite holiday tradition?",
-        "post a new tweet: Make this holiday season unforgettable with Santa's Spot!",
+    # UGC-style post ideas that rotate
+    post_ideas = [
+        "yo check out this AI credit repair tool - been using it and it actually works",
+        "real talk - if bad credit is holding you back, this AI can help fix it",
+        "just automated my entire credit dispute process with AI and saved so much time",
+        "ngl this AI tool for credit repair is fire - way cheaper than those services",
+        "been building AI agents and this credit repair one is my favorite",
+        "if you're tired of paying for credit repair, check this AI tool out",
+        "this AI literally writes dispute letters for you - game changer",
+        "yo anyone else using AI for credit repair? this tool is insane",
+        "just helped someone boost their credit score 100 points with this AI",
+        "real question - why pay $100/month for credit repair when AI does it free?",
     ]
     
-    import random
-    query = random.choice(queries)
+    query = f"post a new tweet: {random.choice(post_ideas)}"
     
     try:
         result = await graph.ainvoke(State(query=query))
-        print(f"[{datetime.now()}] Agent completed successfully")
-        print(f"Analysis: {result.get('analysis', 'N/A')[:200]}...")
+        print(f"[{datetime.now()}] ✅ Posted successfully")
+        print(f"Result: {result.get('analysis', 'N/A')[:200]}...")
     except Exception as e:
-        print(f"[{datetime.now()}] Agent failed: {e}")
+        print(f"[{datetime.now()}] ❌ Failed: {e}")
 
 def main():
-    """Run agent every 1 hour 17 minutes."""
-    interval = (1 * 60 * 60) + (17 * 60)  # 1 hour 17 minutes in seconds
+    """Run agent every 1 hour 17 minutes autonomously."""
+    interval = (1 * 60 * 60) + (17 * 60)
     
-    print(f"Starting scheduler - will run every {interval // 60} minutes")
+    print("🤖 AI Marketing Agent - Running Autonomously")
+    print(f"📅 Posts every {interval // 60} minutes")
+    print("🔥 UGC-style content rotation enabled\n")
     
     while True:
         asyncio.run(run_agent())
-        print(f"[{datetime.now()}] Sleeping for {interval // 60} minutes...")
+        print(f"[{datetime.now()}] 😴 Sleeping for {interval // 60} minutes...\n")
         time.sleep(interval)
 
 if __name__ == "__main__":

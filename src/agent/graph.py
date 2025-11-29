@@ -25,6 +25,8 @@ from .youtube_agent import get_channel_statistics, get_channel_id_by_handle
 from .uploadpost_agent import upload_video_multiplatform
 from .youtube_metadata_agent import generate_youtube_metadata
 from .googledrive_agent import upload_video_to_drive
+from .marketing_prompt import get_marketing_prompt
+from .firecrawl_agent import get_product_context
 
 # Load environment variables
 load_dotenv()
@@ -154,32 +156,18 @@ async def call_composio_tool(tool_name: str, query: str = None, params: dict = N
     except Exception as e:
         return {"error": str(e)}
 
-# Define the Twitter-focused prompt template
+# Define the marketing-focused prompt template with product context
+def get_system_prompt():
+    """Get system prompt with fresh product context."""
+    try:
+        product_context = get_product_context()
+        return get_marketing_prompt() + "\n\n" + product_context
+    except Exception as e:
+        logger.warning(f"Failed to load product context: {e}")
+        return get_marketing_prompt()
+
 prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are an AI-powered Twitter agent promoting Santa's Spot (https://santaspot.xyz), an app that helps families create magical holiday experiences.
-
-INSTRUCTIONS:
-- Post original, engaging content about holiday planning, family traditions, gift ideas, and festive activities
-- Always include the link https://santaspot.xyz in tweets
-- Add relevant emojis and hashtags like #Holidays #Family #SantaSpot #Christmas
-- Keep tweets under 280 characters
-- Create varied content: tips, questions, polls, inspirational messages
-- After posting, reply to your own tweet with additional holiday tips or questions to encourage engagement
-- Engage with trending holiday topics from searches
-- Use the image subagent to generate visual prompts for holiday-themed images
-
-CONTENT STRATEGY:
-- Post 2-3 times per session with varied topics
-- Reply to 1-2 relevant tweets from search results
-- Focus on helpful, joyful, and family-oriented content
-- Use emojis for festivity: 🎄❄️🎅🦌
-
-TOOLS AVAILABLE:
-- Search tweets for trending holiday topics
-- Post new tweets, replies, and polls
-- Generate holiday-themed image prompts
-- Like and retweet engaging content
-- Send DMs with holiday greetings"""),
+    ("system", get_system_prompt()),
     ("human", "{input}"),
     ("placeholder", "{agent_scratchpad}"),
 ])
@@ -303,13 +291,25 @@ async def call_model(state: State, runtime: Runtime[Context]) -> Dict[str, Any]:
             if not str(unique_id) in tweet_text:
                 tweet_text += f" {unique_id}"
             
-            # Add link, emojis, hashtags if not present
-            if "https://santaspot.xyz" not in tweet_text:
-                tweet_text += " https://santaspot.xyz"
-            if not any(emoji in tweet_text for emoji in ["🎄", "❄️", "🎅", "🦌"]):
-                tweet_text += " 🎄"
-            if "#SantaSpot" not in tweet_text:
-                tweet_text += " #SantaSpot #Holidays"
+            # Add URL if not present (rotate between products)
+            if "http" not in tweet_text:
+                urls = [
+                    "https://consumerai.info",
+                    "https://disputeai.xyz",
+                    "https://fdwa.site",
+                    "https://linktr.ee/omniai"
+                ]
+                tweet_text += f" {random.choice(urls)}"
+            
+            # Add emoji if not present
+            emojis = ["🚀", "🤖", "💡", "🔥", "⚡", "🎯", "🎄", "❄️"]
+            if not any(emoji in tweet_text for emoji in emojis):
+                tweet_text += " 🚀"
+            
+            # Add hashtag if not present
+            if "#" not in tweet_text:
+                hashtags = ["#CreditRepair", "#AITools", "#DisputeAI", "#ConsumerAI"]
+                tweet_text += f" {random.choice(hashtags)}"
             
             # Ensure under 280 chars
             if len(tweet_text) > 280:
@@ -441,8 +441,14 @@ async def call_model(state: State, runtime: Runtime[Context]) -> Dict[str, Any]:
                 data = result.get("data", {})
                 tweet_id = data.get("id")
                 if tweet_id:
-                    # Reply to own tweet with holiday tip
-                    reply_text = f"Check out more holiday magic at https://santaspot.xyz! 🎅 #SantaSpot"
+                    # Reply with link or extra value
+                    reply_options = [
+                        f"Check out all our tools: https://linktr.ee/omniai 🔗",
+                        f"Need help? Hit me up: https://buymeacoffee.com/coinvest 💬",
+                        f"More info here: https://fdwa.site 💯",
+                        f"DM me if you got questions! 👀"
+                    ]
+                    reply_text = random.choice(reply_options)
                     reply_params = {
                         "text": reply_text,
                         "reply_in_reply_to_tweet_id": str(tweet_id)

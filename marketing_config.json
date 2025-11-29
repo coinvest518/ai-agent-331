@@ -1,0 +1,82 @@
+{
+  "company": {
+    "name": "OmniAI / FDW Agency",
+    "tagline": "Your AI Automation Partner",
+    "description": "We build AI agents that actually work. Credit repair AI, automation tools, and custom solutions that save you time and make you money."
+  },
+  "products": [
+    {
+      "name": "ConsumerAI",
+      "url": "https://consumerai.info",
+      "description": "AI-powered credit repair tool that helps you fix your credit automatically",
+      "hashtags": ["#CreditRepair", "#ConsumerAI", "#FixYourCredit"],
+      "keywords": ["credit repair", "credit score", "AI credit", "dispute letters"]
+    },
+    {
+      "name": "DisputeAI",
+      "url": "https://disputeai.xyz",
+      "description": "Smart AI agent for automating credit disputes and improving your credit score",
+      "hashtags": ["#DisputeAI", "#CreditDispute", "#AITools"],
+      "keywords": ["credit disputes", "credit bureaus", "AI automation", "credit repair"]
+    },
+    {
+      "name": "FDW Agency",
+      "url": "https://fdwa.site",
+      "description": "Full-service AI automation company building custom agents for your business",
+      "hashtags": ["#AIAutomation", "#FDWAgency", "#CustomAI"],
+      "keywords": ["AI agents", "automation", "custom solutions", "business AI"]
+    }
+  ],
+  "links": {
+    "linktree": "https://linktr.ee/omniai",
+    "coffee": "https://buymeacoffee.com/coinvest",
+    "extras": "https://buymeacoffee.com/coinvest/extras",
+    "leap": "https://theleap.co/creator/FDW_Agency/"
+  },
+  "content_strategy": {
+    "tone": "Casual, friendly, like talking to a friend who found something cool",
+    "style": "UGC-style, conversational, real talk. No corporate BS.",
+    "emojis": ["💯", "🔥", "👀", "💪", "✨", "🎯", "💰", "🚀"],
+    "post_types": [
+      "Credit repair tips",
+      "AI tool demos",
+      "Success stories",
+      "Behind-the-scenes",
+      "Quick tips",
+      "Product features",
+      "Real talk about credit"
+    ]
+  },
+  "target_audience": {
+    "primary": "People with bad credit, entrepreneurs, side hustlers",
+    "secondary": "Business owners needing automation, tech-curious folks",
+    "pain_points": [
+      "Bad credit holding them back",
+      "Expensive credit repair services",
+      "Manual tasks eating up time",
+      "Don't know where to start with AI"
+    ]
+  },
+  "value_propositions": [
+    "Fix your credit with AI - no expensive services needed",
+    "Automate the boring stuff so you can focus on what matters",
+    "AI tools that actually work, not just hype",
+    "Custom solutions built for YOUR specific needs"
+  ],
+  "call_to_actions": [
+    "Check it out: {url}",
+    "Link in bio for more",
+    "DM me if you need help",
+    "Drop a 💯 if you need this",
+    "Tag someone fixing their credit"
+  ],
+  "post_rotation": [
+    "credit_repair_tips",
+    "ai_tool_showcase",
+    "success_story",
+    "behind_the_scenes",
+    "quick_tip",
+    "product_feature",
+    "engagement_question"
+  ]
+}

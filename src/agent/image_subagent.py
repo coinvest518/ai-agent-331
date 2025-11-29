@@ -40,7 +40,7 @@ def enhance_prompt_for_image(text: str, product_name: str = None, product_price:
         selling_focus += f" Include the price '{product_price}'."
 
     prompt = f"""
-Convert this social media post into a visual art prompt for AI image generation focused on futuristic digital cyberpunk themes for Santa's Spot app.
+Convert this social media post into a visual art prompt for AI image generation focused on AI tools, credit repair, and automation.
 
 SOCIAL MEDIA TEXT:
 {text}
@@ -49,10 +49,10 @@ REQUIREMENTS:
 - Remove ALL hashtags
 - Remove ALL special characters (* # @ etc)
 - Remove ALL markdown formatting
-- Extract core visual theme related to holidays and family
-- Add futuristic, digital, cyberpunk imagery keywords: neon lights, holographic displays, digital interfaces, cyber elements, high-tech gadgets
-- Style: futuristic, cyberpunk, digital, neon-lit, sci-fi holiday
-- Include Santa's Spot branding elements: digital Santa, cyber reindeer, holographic gifts
+- Extract core visual theme related to AI, credit repair, automation, or business growth
+- Add modern tech imagery: AI interfaces, credit score dashboards, automation workflows, digital tools, futuristic tech
+- Style: modern, professional, tech-forward, clean, inspiring
+- Include visual elements: credit score graphs, AI robots, automation symbols, success imagery
 - Maximum 200 characters
 {selling_focus}
 
@@ -76,7 +76,7 @@ Return ONLY the clean image prompt. No explanations.
         # Fallback: basic cleanup
         fallback = re.sub(r"[*#@\[\]{}()\'\"\\]", "", text)
         fallback = re.sub(r"\s+", " ", fallback).strip()
-        fallback_prompt = f"Futuristic cyberpunk holiday image: {fallback[:150]}"
+        fallback_prompt = f"Modern AI and credit repair tech image: {fallback[:150]}"
         if product_name:
             fallback_prompt += f" Featuring '{product_name}'."
         if product_price:
