@@ -392,8 +392,12 @@ async def call_model(state: State, runtime: Runtime[Context]) -> Dict[str, Any]:
                                             # Generate YouTube metadata
                                             try:
                                                 metadata = generate_youtube_metadata(tweet_text)
-                                                
-                                                # Upload to YouTube using UploadPost
+                                            except Exception as meta_e:
+                                                logger.warning(f"Metadata generation failed: {meta_e}")
+                                                metadata = {"title": "Santa Spot Video", "description": tweet_text}
+                                            
+                                            # Try YouTube upload (optional)
+                                            try:
                                                 upload_result = upload_video_multiplatform(
                                                     video_path,
                                                     title=metadata["title"],
@@ -401,18 +405,21 @@ async def call_model(state: State, runtime: Runtime[Context]) -> Dict[str, Any]:
                                                     platforms=["youtube"]
                                                 )
                                                 if upload_result.get("success"):
-                                                    logger.info(f"Video uploaded to YouTube successfully!")
-                                                
-                                                # Upload video to Google Drive
+                                                    logger.info("Video uploaded to YouTube")
+                                            except Exception as yt_e:
+                                                logger.warning(f"YouTube upload failed: {yt_e}")
+                                            
+                                            # Always upload to Google Drive
+                                            try:
                                                 drive_result = upload_video_to_drive(
                                                     video_path,
                                                     title=metadata["title"],
                                                     description=metadata["description"]
                                                 )
                                                 if drive_result.get("success"):
-                                                    logger.info(f"Video uploaded to Google Drive successfully!")
-                                            except Exception as up_e:
-                                                logger.warning(f"Video upload failed: {up_e}")
+                                                    logger.info("Video uploaded to Google Drive")
+                                            except Exception as drive_e:
+                                                logger.warning(f"Google Drive upload failed: {drive_e}")
                                     except Exception as video_e:
                                         logger.warning(f"Video generation failed: {video_e}")
                         except Exception as e:
